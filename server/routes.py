@@ -69,9 +69,13 @@ def index():
  def get_users():
      try:
          hostname = request.args.get("hostname")
-         command = "dig " + hostname
-         data = subprocess.check_output(command, shell=True) 
-         return data
+         allowlist = ["example.com", "example.org", "example.net"]
+         if hostname in allowlist:
+             command = ["dig", hostname]
+             data = subprocess.check_output(command)
+             return data
+         else:
+             return jsonify(data="Invalid hostname"), 400
      except:
          data = str(hostname) + " username not found"
          return data
